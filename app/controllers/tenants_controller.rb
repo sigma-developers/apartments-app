@@ -1,7 +1,7 @@
 class TenantsController < ApplicationController
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
     rescue_from ActiveRecord::RecordInvalid, with: :render_uprocessable_entity_response
-    skip_before_action :verify_authenticity_token
+    
     
     
     #GET /tenants
@@ -24,7 +24,8 @@ class TenantsController < ApplicationController
 
     #PATCH /tenants
     def update
-        tenant = Tenant.update!(tenant_params)
+        tenant = Tenant.find(params[:id])
+        tenant.update!(tenant_params)
         render json: tenant
     end
 
@@ -34,7 +35,7 @@ class TenantsController < ApplicationController
         tenant = Tenant.find(params[:id])
         tenant.destroy
 
-        head :no
+        head :no_content
     end
 
     private
@@ -48,7 +49,7 @@ class TenantsController < ApplicationController
     end
 
     def render_uprocessable_entity_response(invalid)
-        render json: {errors: invalid.record.errors.full_messages}, status: :unpocessable_entity
+        render json: {errors: invalid.record.errors.full_messages}, status: :unprocessable_entity
     end
 
 end
