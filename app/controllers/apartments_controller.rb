@@ -1,7 +1,17 @@
 class ApartmentsController < ApplicationController
     def show
         apartment=Apartment.find(params[:id])
-        render json: apartment
+        if apartment
+            render json: apartment
+        else
+            render json: { error: "Apartment not found" }, status: :not_found
+        end
+        
+    end
+    def create
+        apartment =Apartment.create!(parameters)
+        render json: apartment, status: :created
+        
     end
     def index
         apartment=Apartment.all
@@ -10,10 +20,18 @@ class ApartmentsController < ApplicationController
     def update
         apartment=Apartment.find(params[:id])
         apartment.update(number: params(:number))
-        render json: apartment
+        if apartment
+            render json: apartment
+        else
+            render json: { error: "Apartment not found" }, status: :not_found
+        end
     end
     def destroy
         apartment=Apartment.find(params[:id])
         apartment.destroy
+    end
+    private
+    def parameters
+        params.permit(:name)
     end
 end
