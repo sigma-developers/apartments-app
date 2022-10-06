@@ -29,6 +29,7 @@ class ApartmentsController < ApplicationController
     def destroy
         apartment=Apartment.find(params[:id])
         apartment.destroy
+        head :no_content
     end
     private
     def parameters
